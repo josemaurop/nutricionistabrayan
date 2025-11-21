@@ -15,31 +15,24 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
   <style>
-    /* --- VARIÁVEIS VISUAIS --- */
     :root {
       --bg-body: #030304;
       --bg-surface: #0a0a0a;
       --bg-card: #121212;
-
       --text-main: #ffffff;
       --text-muted: #a1a1aa;
-
       --accent: #3b82f6;
       --accent-dim: rgba(59, 130, 246, 0.2);
       --gold: #d4af37;
-
       --glass-border: rgba(255, 255, 255, 0.08);
       --glass-bg: rgba(255, 255, 255, 0.03);
-
       --header-height: 90px;
       --radius-pill: 100px;
       --radius-lg: 24px;
-
       --font-main: 'Outfit', sans-serif;
       --font-serif: 'Instrument Serif', serif;
     }
 
-    /* --- BASE --- */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -76,7 +69,6 @@
       opacity: 0.4;
     }
 
-    /* --- TIPOGRAFIA --- */
     h1,
     h2,
     h3,
@@ -108,7 +100,6 @@
       font-weight: 300;
     }
 
-    /* --- UI ELEMENTS --- */
     .container {
       width: 100%;
       max-width: 1200px;
@@ -157,7 +148,6 @@
       border-color: #fff;
     }
 
-    /* Botão WhatsApp */
     .whatsapp-float {
       position: fixed;
       bottom: 30px;
@@ -177,6 +167,10 @@
       animation: pulse 3s infinite;
     }
 
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+
     @keyframes pulse {
       0% {
         box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
@@ -191,7 +185,6 @@
       }
     }
 
-    /* --- HEADER --- */
     header {
       position: fixed;
       top: 0;
@@ -219,14 +212,14 @@
     }
 
     .logo-img {
-      height: 80px;
+      height: 65px;
       width: auto;
       transition: 0.4s ease;
       display: block;
     }
 
     header.scrolled .logo-img {
-      height: 60px;
+      height: 45px;
     }
 
     .nav-links {
@@ -253,7 +246,6 @@
       cursor: pointer;
     }
 
-    /* --- HERO SECTION --- */
     .hero {
       min-height: 100svh;
       width: 100%;
@@ -298,7 +290,6 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
-    /* --- BIO SECTION (QUEM SOU - REDESIGNED) --- */
     .bio-section {
       padding: 100px 0;
       background: var(--bg-surface);
@@ -312,7 +303,6 @@
       align-items: center;
     }
 
-    /* Foto Editorial */
     .bio-image-frame {
       position: relative;
       border-radius: var(--radius-lg);
@@ -334,7 +324,6 @@
       transform: scale(1.03);
     }
 
-    /* Badge CRN Flutuante */
     .bio-badge {
       position: absolute;
       bottom: 20px;
@@ -349,7 +338,6 @@
       gap: 12px;
     }
 
-    /* Texto */
     .bio-text h2 {
       font-size: 3rem;
       margin-bottom: 20px;
@@ -377,7 +365,6 @@
       letter-spacing: 1px;
     }
 
-    /* --- TRÍADE SECTION (SIMPLIFICADA & VISUAL) --- */
     .triade-section {
       padding: 120px 0;
       position: relative;
@@ -411,7 +398,6 @@
       border-color: var(--gold);
     }
 
-    /* Hollow Number Background */
     .card-number {
       position: absolute;
       top: -20px;
@@ -454,13 +440,11 @@
       color: var(--text-muted);
     }
 
-    /* --- MOSAICO (DEPOIMENTOS DISRUPTIVOS) --- */
     .mosaic-section {
       padding: 100px 0;
       overflow: hidden;
     }
 
-    /* Desktop Parallax */
     .mosaic-desktop {
       display: flex;
       justify-content: center;
@@ -485,24 +469,29 @@
       border: 1px solid var(--glass-border);
     }
 
-    .video-tile img {
+    .video-tile video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: 0.4s;
-      opacity: 0.8;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
     }
 
-    .video-tile:hover img {
-      opacity: 1;
-      transform: scale(1.05);
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 40%);
+      z-index: 1;
+      pointer-events: none;
     }
 
     .play-badge {
       position: absolute;
       bottom: 15px;
       left: 15px;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.6);
       padding: 6px 14px;
       border-radius: 50px;
       font-size: 0.8rem;
@@ -511,9 +500,20 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      z-index: 2;
+      transition: 0.3s;
     }
 
-    /* Mobile Slider */
+    .video-tile.playing {
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+    }
+
+    .video-tile.playing .play-badge {
+      background: var(--accent);
+      color: #fff;
+    }
+
     .mosaic-mobile {
       display: none;
       gap: 15px;
@@ -524,10 +524,14 @@
 
     .mosaic-mobile .video-tile {
       min-width: 260px;
+      height: 460px;
       scroll-snap-align: center;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      position: relative;
     }
 
-    /* --- VÍDEO FINAL --- */
     .final-video-section {
       padding: 80px 0 120px;
       text-align: center;
@@ -543,7 +547,6 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     }
 
-    /* --- FOOTER --- */
     footer {
       background: #000;
       border-top: 1px solid var(--glass-border);
@@ -578,7 +581,6 @@
       padding-left: 5px;
     }
 
-    /* --- MOBILE ADJUSTMENTS --- */
     @media (max-width: 1024px) {
 
       .nav-links,
@@ -636,7 +638,6 @@
       }
     }
 
-    /* Mobile Menu */
     .mobile-menu-overlay {
       position: fixed;
       inset: 0;
@@ -725,7 +726,7 @@
   <section id="sobre" class="bio-section">
     <div class="container bio-grid">
       <div class="bio-image-frame">
-        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=2070" alt="Brayan Rezende">
+        <img src="perfil.jpg" alt="Brayan Rezende">
         <div class="bio-badge">
           <i class="ri-shield-check-fill" style="color: #fff; font-size: 1.2rem;"></i>
           <div>
@@ -831,44 +832,90 @@
     </div>
 
     <div class="mosaic-desktop">
+
       <div class="mosaic-col col-up">
-        <div class="video-tile"><img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=500">
-          <div class="play-badge"><i class="ri-play-fill"></i> Hipertrofia</div>
+        <div class="video-tile" onclick="toggleSound(this)">
+          <video autoplay loop muted playsinline>
+            <source src="depoimento1.mp4" type="video/mp4">
+          </video>
+          <div class="video-overlay"></div>
+          <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Hipertrofia</div>
         </div>
-        <div class="video-tile"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=500">
-          <div class="play-badge"><i class="ri-play-fill"></i> Definição</div>
+        <div class="video-tile" onclick="toggleSound(this)">
+          <video autoplay loop muted playsinline>
+            <source src="depoimento2.mp4" type="video/mp4">
+          </video>
+          <div class="video-overlay"></div>
+          <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Definição</div>
         </div>
       </div>
+
       <div class="mosaic-col col-down" style="padding-top: 60px;">
-        <div class="video-tile"><img src="https://images.unsplash.com/photo-1549476464-37392f717541?q=80&w=500">
-          <div class="play-badge"><i class="ri-play-fill"></i> Emagrecimento</div>
+        <div class="video-tile" onclick="toggleSound(this)">
+          <video autoplay loop muted playsinline>
+            <source src="depoimento3.mp4" type="video/mp4">
+          </video>
+          <div class="video-overlay"></div>
+          <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Emagrecimento</div>
         </div>
-        <div class="video-tile"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=500">
-          <div class="play-badge"><i class="ri-play-fill"></i> Rotina Executiva</div>
+        <div class="video-tile" onclick="toggleSound(this)">
+          <video autoplay loop muted playsinline>
+            <source src="depoimento4.mp4" type="video/mp4">
+          </video>
+          <div class="video-overlay"></div>
+          <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Rotina Executiva</div>
         </div>
       </div>
+
       <div class="mosaic-col col-up">
-        <div class="video-tile"><img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=500">
-          <div class="play-badge"><i class="ri-play-fill"></i> Performance</div>
+        <div class="video-tile" onclick="toggleSound(this)">
+          <video autoplay loop muted playsinline>
+            <source src="depoimento5.mp4" type="video/mp4">
+          </video>
+          <div class="video-overlay"></div>
+          <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Performance</div>
         </div>
-        <div class="video-tile"><img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=500">
-          <div class="play-badge"><i class="ri-play-fill"></i> Saúde</div>
+        <div class="video-tile" onclick="toggleSound(this)">
+          <video autoplay loop muted playsinline>
+            <source src="depoimento6.mp4" type="video/mp4">
+          </video>
+          <div class="video-overlay"></div>
+          <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Saúde</div>
         </div>
       </div>
     </div>
 
     <div class="mosaic-mobile">
-      <div class="video-tile"><img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=500">
-        <div class="play-badge"><i class="ri-play-fill"></i> Hipertrofia</div>
+      <div class="video-tile" onclick="toggleSound(this)">
+        <video autoplay loop muted playsinline>
+          <source src="depoimento1.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Hipertrofia</div>
       </div>
-      <div class="video-tile"><img src="https://images.unsplash.com/photo-1549476464-37392f717541?q=80&w=500">
-        <div class="play-badge"><i class="ri-play-fill"></i> Emagrecimento</div>
+
+      <div class="video-tile" onclick="toggleSound(this)">
+        <video autoplay loop muted playsinline>
+          <source src="depoimento3.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Emagrecimento</div>
       </div>
-      <div class="video-tile"><img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=500">
-        <div class="play-badge"><i class="ri-play-fill"></i> Performance</div>
+
+      <div class="video-tile" onclick="toggleSound(this)">
+        <video autoplay loop muted playsinline>
+          <source src="depoimento5.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Performance</div>
       </div>
-      <div class="video-tile"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=500">
-        <div class="play-badge"><i class="ri-play-fill"></i> Rotina</div>
+
+      <div class="video-tile" onclick="toggleSound(this)">
+        <video autoplay loop muted playsinline>
+          <source src="depoimento4.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        <div class="play-badge"><i class="ri-volume-mute-fill icon-sound"></i> Rotina</div>
       </div>
     </div>
   </section>
@@ -880,9 +927,9 @@
         <h2 class="section-header">Comece sua jornada hoje.</h2>
       </div>
       <div class="video-container">
-        <video controls poster="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1000"
+        <video controls poster="capavid.png"
           style="width:100%; height:100%; object-fit:cover;">
-          <source src="https://cdn.coverr.co/videos/coverr-man-talking-to-camera-5386/1080p.mp4" type="video/mp4">
+          <source src="video.mp4" type="video/mp4">
         </video>
       </div>
       <div style="text-align: center; margin-top: 40px;">
@@ -966,6 +1013,42 @@
         scrollTrigger: { trigger: card, start: "top 85%" }
       });
     });
+  </script>
+  <script>
+    function toggleSound(element) {
+      // Encontra o vídeo dentro do elemento clicado
+      const video = element.querySelector('video');
+      const icon = element.querySelector('.icon-sound');
+
+      // 1. Silencia todos os outros vídeos da página
+      document.querySelectorAll('video').forEach(v => {
+        if (v !== video) {
+          v.muted = true;
+          // Remove o estilo visual dos outros cards
+          if (v.parentElement.classList.contains('video-tile')) {
+            v.parentElement.classList.remove('playing');
+            const otherIcon = v.parentElement.querySelector('.icon-sound');
+            if (otherIcon) {
+              otherIcon.classList.remove('ri-volume-up-fill');
+              otherIcon.classList.add('ri-volume-mute-fill');
+            }
+          }
+        }
+      });
+
+      // 2. Alterna o som do vídeo clicado
+      if (video.muted) {
+        video.muted = false; // Liga som
+        element.classList.add('playing'); // Adiciona brilho
+        icon.classList.remove('ri-volume-mute-fill');
+        icon.classList.add('ri-volume-up-fill'); // Troca ícone
+      } else {
+        video.muted = true; // Desliga som
+        element.classList.remove('playing'); // Remove brilho
+        icon.classList.remove('ri-volume-up-fill');
+        icon.classList.add('ri-volume-mute-fill'); // Troca ícone
+      }
+    }
   </script>
 </body>
 
